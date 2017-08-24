@@ -1,0 +1,22 @@
+#dockerImage: "nexus.services.mnscorp.net:6666/mtp-channelorder-esstub-develop:pr-8"
+#dockerTag: 0.01
+replicas: 1
+replicasMax: 2
+cpuTargetPercentage: 50
+ingress:
+  name: demo-app
+  # This will need to be set at deploy time as it differs from environment to environment
+  domain: "dev.platform.mnscorp.net"
+  subdomain: platform
+  cluster: dev
+
+  # Mark ssl as true to enable SSL on this service
+  ssl: true
+  access_policy: 'public'
+# Change below value if you want to deploy the application in a different namespace
+namespace: demo
+resources:
+  requests:
+    memory: 100Mi
+    cpu: 200m
+environment: dev

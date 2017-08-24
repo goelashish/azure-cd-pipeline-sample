@@ -1,0 +1,10 @@
+apiVersion: v1
+name: demo-app
+version: 1
+description: Applicaition for demo
+home: https://github.com/DigitalInnovation/azure-cd-pipeline-sample.git
+sources:
+  - https://github.com/DigitalInnovation/azure-cd-pipeline-sample.git
+maintainers:
+  - name: EPAM team
+    email: aleksandr.mazurenko@mnscorp.net

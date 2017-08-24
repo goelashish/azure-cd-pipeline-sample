@@ -1,0 +1,31 @@
+dockerImage: "nexus.services.mnscorp.net:6666/demo_app:1.63"
+#dockerTag: 1.63
+replicas: 1
+replicasMax: 2
+cpuTargetPercentage: 50
+service:
+  externalPort: 80
+  internalPort: 8080
+  registrySecret: "nexus-registry"
+ingress:
+  name: demoapp
+  # This will need to be set at deploy time as it differs from environment to environment
+  domain: "poc.platform.mnscorp.net"
+
+  # Use either domain value above or subdomain + cluster values below to configure your environment.
+  # Preference to subdomain + cluster name
+  # Subdomain can be either one of following: 'apps', 'platform', 'services'.
+  # Final domain for the service will be "name.cluster.subdomain.mnscorp.net", e.g. sampleapp.poc.platform.mnscorp.net
+  subdomain: platform
+  cluster: poc
+
+  # Mark ssl as true to enable SSL on this service
+  ssl: false
+  access_policy: 'public'
+# Change below value if you want to deploy the application in a different namespace
+namespace: epam
+resources:
+  requests:
+    memory: 100Mi
+    cpu: 200m
+ 

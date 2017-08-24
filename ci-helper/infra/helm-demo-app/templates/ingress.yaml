@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+  {{- if .Values.ingress.access_policy }}
+    ingress.kubernetes.io/configuration-snippet: |-
+      set $ingress_class '{{ .Values.ingress.access_policy }}';
+  {{- end }}
+  {{- if .Values.ingress.ssl }}
+    kubernetes.io/tls-acme: "true"
+  {{- end }}
+  {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.ssl }}
+  tls:
+    - hosts:
+      - {{ .Values.ingress.name }}.{{ .Values.ingress.domain }}
+      secretName: {{ template "name" . }}-tls
+  {{- end }}
+  rules:
+  {{- if and .Values.ingress.subdomain .Values.ingress.cluster }}
+    - host: {{ .Values.ingress.name }}.{{ .Values.ingress.cluster }}.{{ .Values.ingress.subdomain }}.mnscorp.net
+  {{- else}}
+    - host: {{ .Values.ingress.name }}.{{ .Values.ingress.domain }}
+  {{- end}}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ template "fullname" . }}
+              servicePort: http

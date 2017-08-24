@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.replicas }}
+  # We dont need a large deployment history limit as Helm keeps it's own
+  # history
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      namespace: {{ .Values.namespace }}
+      labels:
+        app: {{ template "fullname" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      containers:
+      - name: server
+        image: {{ template "docker-image" . }}
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sleep", "15"] 
+        imagePullPolicy: Always
+        ports:
+        # The port that our container listens for HTTP requests on. Might also
+        # be 3000 or 8000
+        - containerPort: 8080
+          name: http
+        env:
+        # You can set environment variables that don't change across environments here
+          - name: SPRING_PROFILES_ACTIVE
+            value: {{ .Values.environment }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
