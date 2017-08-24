@@ -1,4 +1,5 @@
 def call(image, workDir='') {
+	println(p.k8sConfig)
 	def installed = false;
   def p = load("ci-helper/infra/${workDir}/application.properties.groovy")
 	writeSecretFileInJenkins(p.k8sConfig, p.k8sConfigName)
