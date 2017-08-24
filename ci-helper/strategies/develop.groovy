@@ -58,7 +58,7 @@ def call(isMerge, prNumber, workDir='') {
                     stage('Package and Publish') {println "Package and Publish is skipped"}                
                 }
                 gitTag="${env.BRANCH_NAME}/${tag}"
-                fullAppTag = "mtp-${p.applicationName}-${env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()}:${tag.replaceAll('/', '-')}"
+                fullAppTag = "${p.applicationName}-${env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()}:${tag.replaceAll('/', '-')}"
 
                 if(env.ENV_STACK) {
                     stage('Deploy') {

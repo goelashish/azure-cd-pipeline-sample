@@ -2,6 +2,9 @@ def call(tag, workDir='') {
 	try {
 		chBranchName = env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()
 		chTag = tag.replaceAll('/', '-').toLowerCase()
+		println 'chBranchName =' + chBranchName
+		println 'tag =' + tag
+		println 'env.BRANCH_NAME =' + env.BRANCH_NAME
 		def p = load("ci-helper/infra/${workDir}/application.properties.groovy")
 
 		sh "${makeCpList(p.files).join("\n")}"
