@@ -1,3 +1,7 @@
+def getIsMerge(){
+  findInOutput = sh (script: "git show --summary ${getLastCommit(-1)}", returnStdout: true).find(/Merge: .{7} .{7}/)
+  return (findInOutput) ? true : false
+}
 def call(image, workDir='') {
 
 	def installed = false;
@@ -8,6 +12,7 @@ def call(image, workDir='') {
 	  withEnv(["KUBECONFIG=${KUBECONFIG}"]) {    
         docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
     	       docker.image("helm-kubectl").inside('--sysctl net.ipv6.conf.all.disable_ipv6=1') {
+
 		   println("TOTAL DEBUG")
 		       try { 
 			       def command_lint = "cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -"
@@ -35,6 +40,7 @@ def call(image, workDir='') {
 			       println(e)
 		       }
 			      
+
 
                  if (!installed){ prinln('INSTALLED')
                    sh(returnStdout: true, script: """
