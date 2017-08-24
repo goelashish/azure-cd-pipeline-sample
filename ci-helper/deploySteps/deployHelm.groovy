@@ -1,7 +1,7 @@
 def call(image, workDir='') {
 
   def installed = false;
-  def p = load("ci-helper/infra/${workDir}/application.properties.groovy")
+  def p = load("ci-helper/infra/application.properties.groovy")
   println(p.k8sConfig)
   writeSecretFileInJenkins(p.k8sConfig, p.k8sConfigName)
   withCredentials([file(credentialsId: p.k8sConfigName, variable: 'KUBECONFIG')]) {
@@ -15,6 +15,7 @@ def call(image, workDir='') {
                  if (!installed){ 
                   sh(returnStdout: true, script: """
                      helm init --client-only; 
+                     echo 'debug';
                      helm install ci-helper/infra/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                      --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                      --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
