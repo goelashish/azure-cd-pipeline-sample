@@ -6,7 +6,7 @@ def call(applicationName, applicationUrl) {
       println "Building jq"
       sh "docker build -t jq -f ci-helper/common-dockerfiles/jq.Dockerfile ci-helper/common-dockerfiles/"
       println "Runnung jq container for getting health status"
-      println "Application URL: " + applicationURL
+      println "Application URL: " + applicationUrl
       docker.image("jq").inside{
                 sanityCheckResult = sh (
                     script: """#!/bin/sh
