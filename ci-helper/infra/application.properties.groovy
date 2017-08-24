@@ -5,7 +5,7 @@
   k8sConfigName: "demo-config-${env.ENV_STACK}",
   k8sConfig: "${getVaultSecret(githubTokenId, vaultUrl, "${vaultk8sSecretDataPath}/${env.ENV_STACK}")['kubconfig']}",
   dockerRegistryCredentialsId: "${createShortUserPassRecord(githubTokenId, vaultUrl, "${vaultNexusSecretDataPath}/nexus_data", 'nexus-creds')}",
-  dockerRegistryUrl: "${getVaultSecret(githubTokenId, vaultUrl, "${vaultNexusSecretDataPath}/nexus_data",  )['docker_url']}",
+  dockerRegistryUrl: "${getVaultSecret(githubTokenId, vaultUrl, "${vaultNexusSecretDataPath}/nexus_data" )['docker_url']}",
   mavenSettingsXml: "${getVaultSecret(githubTokenId, vaultUrl, "${vaultNexusSecretDataPath}/settings")['data']}",
 
   sonarProperties: [
