@@ -6,7 +6,7 @@ def call(image, workDir='') {
 	  withEnv(["KUBECONFIG=${KUBECONFIG}"]) {    
         docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
     	       docker.image("helm-kubectl").inside('--sysctl net.ipv6.conf.all.disable_ipv6=1') {
-    	           sh("cd ci-helper/infra/${p.applicationName}/helm-${p.applicationName}/; helm lint; cd -")
+    	           sh("cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -")
                  try {
                    installed = sh(returnStdout: true, script: """
                    helm ls --tiller-namespace=${p.tillerNamespace}  | \
@@ -17,7 +17,7 @@ def call(image, workDir='') {
                  if (!installed){
                    sh(returnStdout: true, script: """
                    helm init --client-only; 
-                   helm install ci-helper/infra/${p.applicationName}/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
+                   helm install ci-helper/infra/${workDir}/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
                    --set ingress.cluster=${env.ENV_STACK} \
@@ -25,7 +25,7 @@ def call(image, workDir='') {
                    --tiller-namespace=${p.tillerNamespace};
                  """) } else {
                          sh(returnStdout: true, script: """
-                   cd ci-helper/infra/${p.applicationName}/helm-${p.applicationName}; 
+                   cd ci-helper/infra/${workDir}/helm-${p.applicationName}; 
                    helm upgrade ${p.applicationName}-${env.ENV_STACK} . \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
