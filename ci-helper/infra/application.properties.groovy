@@ -16,7 +16,7 @@
   ],
 
   files: [
-            ["target/demo-0.0.1-SNAPSHOT.jar", "/"],
+            ["target/demo-0.0.1-SNAPSHOT.jar", "/demoapp.jar"],
             ["ci-helper/infra/dockerfiles/app.Dockerfile", "/Dockerfile"]
         ]
 ]

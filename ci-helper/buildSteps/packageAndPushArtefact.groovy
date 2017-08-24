@@ -6,7 +6,7 @@ def call(tag, workDir='') {
 
 		sh "${makeCpList(p.files).join("\n")}"
 		docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
-			def image = docker.build("mtp-${p.applicationName}-${chBranchName}")
+			def image = docker.build("${p.applicationName}-${chBranchName}")
 		    	//Publishing to Nexus
 		    	image.push("${chTag}")
 		    	image.push("latest")
