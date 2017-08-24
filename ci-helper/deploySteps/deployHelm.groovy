@@ -5,10 +5,10 @@ def call(image, workDir='') {
   println(p.k8sConfig)
   writeSecretFileInJenkins(p.k8sConfig, p.k8sConfigName)
   withCredentials([file(credentialsId: p.k8sConfigName, variable: 'KUBECONFIG')]) {
-    withEnv(["KUBECONFIG=${KUBECONFIG}, HELM_HOME=${WORKSPACE}"]) {    
+    withEnv(["KUBECONFIG=${KUBECONFIG}"]) {    
         docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
              docker.image("helm-kubectl").inside() {
-             sh("echo $KUBECONFIG")
+             
              sh("cd ci-helper/infra/helm-${p.applicationName}/; helm lint; cd -")
 
              installed = sh (script: "helm ls --tiller-namespace=${p.tillerNamespace}", returnStdout: true).find(/${p.applicationName}-${env.ENV_STACK}/)
