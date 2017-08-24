@@ -10,7 +10,7 @@ def call(image, workDir='') {
     	       docker.image("helm-kubectl").inside('--sysctl net.ipv6.conf.all.disable_ipv6=1') {
     	           sh("cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -")
 
-                 sh(returnStdout: true, script: "helm ls --tiller-namespace=${p.tillerNamespace} | grep ${p.applicationName}-${env.ENV_STACK};")
+                 sh("helm ls --tiller-namespace=${p.tillerNamespace} | grep ${p.applicationName}-${env.ENV_STACK};")
 
                    installed = sh(returnStdout: true, script: """
                    helm ls --tiller-namespace=${p.tillerNamespace}  | \
