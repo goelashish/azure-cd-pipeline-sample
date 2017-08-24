@@ -13,7 +13,6 @@ def call(image, workDir='') {
                    grep ${p.applicationName}-${env.ENV_STACK};""")
                  } catch(e) {
                    println("Something went wrong")
-		   throw e
                  }
                  if (!installed){
                    sh(returnStdout: true, script: """
