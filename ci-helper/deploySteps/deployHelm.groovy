@@ -2,12 +2,11 @@ def call(image, workDir='') {
 
   def installed = false;
   def p = load("ci-helper/infra/application.properties.groovy")
-  println(p.k8sConfig)
   writeSecretFileInJenkins(p.k8sConfig, p.k8sConfigName)
   withCredentials([file(credentialsId: p.k8sConfigName, variable: 'KUBECONFIG')]) {
-    withEnv(["KUBECONFIG=${KUBECONFIG}"]) {    
+    withEnv(["KUBECONFIG=${KUBECONFIG}, HELM_HOME=${WORKSPACE}"]) {    
         docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
-             docker.image("helm-kubectl").inside("-e HELM_HOME=${WORKSPACE}") {
+             docker.image("helm-kubectl").inside() {
 
              sh("cd ci-helper/infra/helm-${p.applicationName}/; helm lint; cd -")
              installed = sh (script: "helm ls --tiller-namespace=${p.tillerNamespace}", returnStdout: true).find(/${p.applicationName}-${env.ENV_STACK}/)
@@ -15,7 +14,6 @@ def call(image, workDir='') {
              if (!installed){ 
               sh(returnStdout: true, script: """
                  helm init --client-only; 
-                 echo 'debug';
                  helm install ci-helper/infra/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                  --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                  --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
