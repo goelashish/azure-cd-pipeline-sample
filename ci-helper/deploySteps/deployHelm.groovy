@@ -12,9 +12,35 @@ def call(image, workDir='') {
 	  withEnv(["KUBECONFIG=${KUBECONFIG}"]) {    
         docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
     	       docker.image("helm-kubectl").inside('--sysctl net.ipv6.conf.all.disable_ipv6=1') {
-    	           sh("cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -")
-                 
-                 installed = sh (script: "helm ls --tiller-namespace=${p.tillerNamespace}", returnStdout: true).find(/${p.applicationName}-${env.ENV_STACK}/)
+
+		   println("TOTAL DEBUG")
+		       try { 
+			       def command_lint = "cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -"
+			       println(command_lint)
+			       sh(command_lint)
+		       } catch(e) {
+			       println('Lint not working')
+			       println(e)
+		       }
+		       try { 
+			       def command_ls = "helm ls --tiller-namespace=${p.tillerNamespace} | grep ${p.applicationName}-${env.ENV_STACK};"
+			       println(command_ls)
+			       sh(command_ls)
+		       } catch(e) {
+			       println('Ls not working')
+			       println(e)
+		       }	
+		       try{
+			       installed = sh(returnStdout: true, script: """
+			       helm ls --tiller-namespace=${p.tillerNamespace}  | \
+			       grep ${p.applicationName}-${env.ENV_STACK};""")
+			       println installed 
+		       } catch(e) {
+			       println('Installed not working')
+			       println(e)
+		       }
+			      
+
 
                  if (!installed){ prinln('INSTALLED')
                    sh(returnStdout: true, script: """
