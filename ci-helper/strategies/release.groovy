@@ -57,7 +57,7 @@ def call(isMerge, prNumber, workDir='') {
                 }
 
                 gitTag="${env.BRANCH_NAME}/${tag}"
-                fullAppTag = "${p.applicationName}-${env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()}:${tag.replaceAll('/', '-')}"
+                fullAppTag = (env.BRANCH_NAME =~/\// ) ? (p.applicationName + '-' + env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase():tag.replaceAll('/', '-')) : (env.BRANCH_NAME:tag.replaceAll('/', '-'))
 
                 if(env.ENV_STACK) {
                     stage('Deploy') {
@@ -66,7 +66,7 @@ def call(isMerge, prNumber, workDir='') {
                     }
                     stage('Sanity checks'){
                         stage='Sanity checks'                
-                        //load('ci-helper/deploySteps/sanityChecks.groovy')(p.applicationName,p.applicationUrl)   
+                        load('ci-helper/deploySteps/sanityChecks.groovy')(p.applicationName,p.applicationUrl)   
                     }
                     stage("Publishing") {
                         stage="Publishing (Pushing tag and Creating Wiki)"
