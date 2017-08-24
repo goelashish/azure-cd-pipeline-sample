@@ -42,15 +42,28 @@ def call(image, workDir='') {
 
 
                  if (!installed){ 
-                   sh(returnStdout: true, script: """
-                   helm init --client-only; 
+			 try {
+				 sh(returnStdout: true, script: """
+				 helm init --client-only;""" 
+			}catch(e) {
+				println("init not working")
+				println(e)
+			}
+			try {	 
+			 sh(returnStdout: true, script: """
                    helm install ci-helper/infra/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
                    --set ingress.cluster=${env.ENV_STACK} \
                    --set environment=${env.ENV_STACK} \
                    --tiller-namespace=${p.tillerNamespace};
-                 """) } else {
+                 """
+			  }catch(e) {
+				println("install not working")
+				println(e)
+			}
+			   ) 
+			 } else {
                          sh(returnStdout: true, script: """
                    cd ci-helper/infra/helm-${p.applicationName}; 
                    helm upgrade ${p.applicationName}-${env.ENV_STACK} . \
