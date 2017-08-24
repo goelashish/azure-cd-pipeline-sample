@@ -17,7 +17,7 @@ def call(image, workDir='') {
                  if (!installed){
                    sh(returnStdout: true, script: """
                    helm init --client-only; 
-                   helm install ci-helper/infra/${workDir}/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
+                   helm install ci-helper/infra/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
                    --set ingress.cluster=${env.ENV_STACK} \
@@ -25,7 +25,7 @@ def call(image, workDir='') {
                    --tiller-namespace=${p.tillerNamespace};
                  """) } else {
                          sh(returnStdout: true, script: """
-                   cd ci-helper/infra/${workDir}/helm-${p.applicationName}; 
+                   cd ci-helper/infra/helm-${p.applicationName}; 
                    helm upgrade ${p.applicationName}-${env.ENV_STACK} . \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
