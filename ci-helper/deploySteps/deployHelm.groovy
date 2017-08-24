@@ -1,7 +1,3 @@
-def getIsMerge(){
-  findInOutput = sh (script: "git show --summary ${getLastCommit(-1)}", returnStdout: true).find(/Merge: .{7} .{7}/)
-  return (findInOutput) ? true : false
-}
 def call(image, workDir='') {
 
 	def installed = false;
@@ -23,9 +19,12 @@ def call(image, workDir='') {
 			       println(e)
 		       }
 		       try { 
+
+
 			       def command_ls = "helm ls --tiller-namespace=${p.tillerNamespace} | grep ${p.applicationName}-${env.ENV_STACK};"
 			       println(command_ls)
-			       sh(command_ls)
+			       //sh(command_ls)
+             sh (script: "helm ls --tiller-namespace=${p.tillerNamespace}", returnStdout: true).find(/${p.applicationName}-${env.ENV_STACK}/)
 		       } catch(e) {
 			       println('Ls not working')
 			       println(e)
