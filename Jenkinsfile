@@ -29,7 +29,8 @@ node {
         'githubTokenId=su-mtp-acc-secret-token',
         'vaultUrl=https://vault.platform.mnscorp.net',        
         'vaultNexusSecretDataPath=infrastructure/teams/mtp-stock/prod/nexus',
-        'vaultk8sSecretDataPath=k8s/demo'
+        'vaultk8sSecretDataPath=k8s/demo',
+	'vaultPolicyName=su-mtp-acc-ro'
     ]){   
 
         stage('Preparation') {
