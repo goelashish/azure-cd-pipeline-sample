@@ -24,27 +24,26 @@ def call(image, workDir='') {
 			       def command_ls = "helm ls --tiller-namespace=${p.tillerNamespace} | grep ${p.applicationName}-${env.ENV_STACK};"
 			       println(command_ls)
 			       //sh(command_ls)
-             sh (script: "helm ls --tiller-namespace=${p.tillerNamespace}", returnStdout: true).find(/${p.applicationName}-${env.ENV_STACK}/)
+             installed = sh (script: "helm ls --tiller-namespace=${p.tillerNamespace}", returnStdout: true).find(/${p.applicationName}-${env.ENV_STACK}/)
 		       } catch(e) {
 			       println('Ls not working')
 			       println(e)
 		       }	
-		       try{
-			       installed = sh(returnStdout: true, script: """
-			       helm ls --tiller-namespace=${p.tillerNamespace}  | \
-			       grep ${p.applicationName}-${env.ENV_STACK};""")
-			       println installed 
-		       } catch(e) {
-			       println('Installed not working')
-			       println(e)
-		       }
+		       // try{
+			      //  installed = sh(returnStdout: true, script: """
+			      //  helm ls --tiller-namespace=${p.tillerNamespace}  | \
+			      //  grep ${p.applicationName}-${env.ENV_STACK};""")
+			      //  println installed 
+		       // } catch(e) {
+			      //  println('Installed not working')
+			      //  println(e)
+		       // }
 			      
 
 
-                 if (!installed){ prinln('INSTALLED')
+                 if (!installed){ 
                    sh(returnStdout: true, script: """
                    helm init --client-only; 
-		                echo 'INITIATED' ;
                    helm install ci-helper/infra/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
