@@ -16,7 +16,7 @@
   ],
 
   files: [
-            ["target/mtp-service-enterprisestub-0.0.1-SNAPSHOT.jar", "/"],
+            ["target/demo-0.0.1-SNAPSHOT.jar", "/"],
             ["ci-helper/infra/dockerfiles/app.Dockerfile", "/Dockerfile"]
         ]
 ]
