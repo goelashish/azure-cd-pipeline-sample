@@ -58,7 +58,7 @@ def call(isMerge, prNumber, workDir='') {
                     stage('Package and Publish') {println "Package and Publish is skipped"}                
                 }
                 gitTag="${env.BRANCH_NAME}/${tag}"
-                fullAppTag = "${p.applicationName}-${env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()}:${tag.replaceAll('/', '-')}"
+                fullAppTag = (env.BRANCH_NAME =~/\// ) ? (p.applicationName + '-' + env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()}:tag.replaceAll('/', '-')) : (env.BRANCH_NAME:tag.replaceAll('/', '-'))
 
                 if(env.ENV_STACK) {
                     stage('Deploy') {
@@ -67,7 +67,7 @@ def call(isMerge, prNumber, workDir='') {
                     }
                     stage('Sanity checks'){
                         stage='Sanity checks'                
-                        //load('ci-helper/deploySteps/sanityChecks.groovy')(p.applicationName,p.applicationUrl)    
+                        load('ci-helper/deploySteps/sanityChecks.groovy')(p.applicationName,p.applicationUrl)    
                     }
                     stage("Publishing") {
                         stage="Publishing (Pushing tag and Creating Wiki)"
@@ -78,7 +78,7 @@ def call(isMerge, prNumber, workDir='') {
                             },
                             "Creating wiki": {
                                 stage="Creating wiki"
-                                load("ci-helper/deploySteps/createWiki.groovy")('su-mtp-secret-token', repo, tag, p.applicationName, fullAppTag)
+                                load("ci-helper/deploySteps/createWiki.groovy")(githubTokenId, repo, tag, p.applicationName, fullAppTag)
                                 // shreben
                             }
                         )
