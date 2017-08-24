@@ -10,14 +10,17 @@ def call(image, workDir='') {
     	       docker.image("helm-kubectl").inside('--sysctl net.ipv6.conf.all.disable_ipv6=1') {
     	           sh("cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -")
 
+                 sh(returnStdout: true, script: "helm ls --tiller-namespace=${p.tillerNamespace} | grep ${p.applicationName}-${env.ENV_STACK};")
+
                    installed = sh(returnStdout: true, script: """
                    helm ls --tiller-namespace=${p.tillerNamespace}  | \
                    grep ${p.applicationName}-${env.ENV_STACK};""")
+                  println installed
 
                  if (!installed){ prinln('INSTALLED')
                    sh(returnStdout: true, script: """
                    helm init --client-only; 
-		   echo 'INITIATED' ;
+		                echo 'INITIATED' ;
                    helm install ci-helper/infra/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
