@@ -1,20 +1,19 @@
 def call(image, workDir='') {
-	println(p.k8sConfig)
+
 	def installed = false;
   def p = load("ci-helper/infra/${workDir}/application.properties.groovy")
+  println(p.k8sConfig)
 	writeSecretFileInJenkins(p.k8sConfig, p.k8sConfigName)
 	withCredentials([file(credentialsId: p.k8sConfigName, variable: 'KUBECONFIG')]) {
 	  withEnv(["KUBECONFIG=${KUBECONFIG}"]) {    
         docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
     	       docker.image("helm-kubectl").inside('--sysctl net.ipv6.conf.all.disable_ipv6=1') {
     	           sh("cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -")
-                 try {
+
                    installed = sh(returnStdout: true, script: """
                    helm ls --tiller-namespace=${p.tillerNamespace}  | \
                    grep ${p.applicationName}-${env.ENV_STACK};""")
-                 } catch(e) {
-                   println("Something went wrong")
-                 }
+
                  if (!installed){
                    sh(returnStdout: true, script: """
                    helm init --client-only; 
