@@ -14,9 +14,10 @@ def call(image, workDir='') {
                    helm ls --tiller-namespace=${p.tillerNamespace}  | \
                    grep ${p.applicationName}-${env.ENV_STACK};""")
 
-                 if (!installed){
+                 if (!installed){ prinln('INSTALLED')
                    sh(returnStdout: true, script: """
                    helm init --client-only; 
+		   echo 'INITIATED' ;
                    helm install ci-helper/infra/helm-${p.applicationName} --name=${p.applicationName}-${env.ENV_STACK} \
                    --set dockerImage=${p.dockerRegistryUrl.split('/')[2]}/${image} \
                    --set ingress.domain=${env.ENV_STACK}.platform.mnscorp.net \
