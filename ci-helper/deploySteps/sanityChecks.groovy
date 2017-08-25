@@ -10,6 +10,7 @@ def call(applicationName, applicationUrl) {
       docker.image("jq").inside{
                 sanityCheckResult = sh (
                     script: """#!/bin/sh
+                              sleep 5
                               curl -s -L -X GET ${applicationUrl}/health | jq -r '.status'
                             """,
                     returnStdout: true ).trim()
