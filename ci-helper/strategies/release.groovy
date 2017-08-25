@@ -57,7 +57,7 @@ def call(isMerge, prNumber, workDir='') {
                 }
 
                 gitTag="${env.BRANCH_NAME}/${tag}"
-                fullAppTag = (env.BRANCH_NAME =~/\// ) ? ("${p.applicationName}-${env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()}:${tag.replaceAll('/', '-')}") : ("${env.BRANCH_NAME.toLowerCase()}:${tag.replaceAll('/', '-')}")
+                fullAppTag = (env.BRANCH_NAME =~/\// ) ? ("${p.applicationName}-${env.BRANCH_NAME.split('/').drop(1).join('-').toLowerCase()}:${tag.replaceAll('/', '-')}") : ("${p.applicationName}-${env.BRANCH_NAME.toLowerCase()}:${tag.replaceAll('/', '-')}")
 
                 if(env.ENV_STACK) {
                     stage('Deploy') {
