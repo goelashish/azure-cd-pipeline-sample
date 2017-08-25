@@ -21,7 +21,6 @@ def getLastCommitIdInPR(){
     return (cid) ? cid : getLastCommit(-1)
 }
 
-
 node {
 
     withEnv([
