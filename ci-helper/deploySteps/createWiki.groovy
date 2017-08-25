@@ -1,6 +1,9 @@
 import groovy.json.JsonBuilder;
 
 def call(tag, app, image) {
+    withCredentials([
+        string(credentialsId: githubTokenId, variable: 'GITHUB_ACCESS_TOKEN')
+    ]) {
 
     // Define variables
     def build_user = wrap([$class: 'BuildUser']) { env.BUILD_USER }
