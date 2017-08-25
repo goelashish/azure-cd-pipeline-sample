@@ -22,33 +22,17 @@ def call(tag, app, image) {
     */      
     
     // Wiki contents
-    def sidebar = '''# [Home](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki)
-- dev
-  - [esstub](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-esstub)
-  - [local](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-local)
-  - [service](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-service)
-  - [web](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-web)
-- prod
-  - [esstub](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-esstub)
-  - [local](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-local)
-  - [service](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-service)
-  - [web](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-web)
-'''
+    def sidebar = """# [Home](https://github.com/${repo}/wiki)
+- [dev](https://github.com/${repo}/wiki/dev)
+- [prod](https://github.com/${repo}/wiki/prod)
+"""
 
     def home = """# ${repo} wiki
 
 Page contains information about all the deployments
 
-- dev
-  - [esstub](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-esstub)
-  - [local](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-local)
-  - [service](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-service)
-  - [web](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/dev-web)
-- prod
-  - [esstub](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-esstub)
-  - [local](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-local)
-  - [service](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-service)
-  - [web](https://github.com/DigitalInnovation/mtp-sandwich-site-order-service/wiki/prod-web)
+- [dev](https://github.com/${repo}/wiki/dev)
+- [prod](https://github.com/${repo}/wiki/prod)
 """
 
     // Checkout wiki
@@ -64,16 +48,8 @@ Page contains information about all the deployments
     def changelog = jsonParser('''
         {
             "dev": {
-                "esstub": {},
-                "local": {},
-                "service": {},
-                "web": {}
             },
             "prod": {
-                "esstub": {},
-                "local": {},
-                "service": {},
-                "web": {}   
             }
         }
     ''')
@@ -104,7 +80,7 @@ Page contains information about all the deployments
     """)                                                 
 
     // Add build info
-    changelog."${env.ENV_STACK}"."${env.BRANCH_NAME.split('/')[0]}" << build_info
+    changelog."${env.ENV_STACK}" << build_info
 
     // Write changelog
     def changelog_postdeploy = new JsonBuilder(changelog).toPrettyString()
@@ -118,12 +94,12 @@ Page contains information about all the deployments
 | --- | --- | --- | --- | --- | --- |'''
 
     // Initialize page
-    def page = "${env.ENV_STACK}-${env.BRANCH_NAME.split('/')[0]}.md"
+    def page = "${env.ENV_STACK}.md"
     sh "echo \"${table_header}\" > wiki/${page}"
 
     // Populate wiki page
     def table_row = ''
-    changelog."${env.ENV_STACK}"."${env.BRANCH_NAME.split('/')[0]}".sort().each { entry ->
+    changelog."${env.ENV_STACK}".sort().each { entry ->
         table_row = table_row + "| ${entry.key} | ${entry.value.mode} | ${entry.value.tag} | ${entry.value.image} | ${entry.value.user} | ${entry.value.sha} |\n"
     }
     sh "printf \"${table_row}\" >> wiki/${page}"
