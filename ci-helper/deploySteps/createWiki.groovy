@@ -54,7 +54,7 @@ Page contains information about all the deployments
     // Checkout wiki
     sh """
         rm -rf wiki || echo 'No wiki folder' 
-        git clone https://${token}@github.com/${repo}.wiki.git wiki
+        git clone git@github.com:${repo}.wiki.git wiki
         cd wiki
         git config --global user.email 'jenkins-coreci@devops.mnscorp.net'
         git config --global user.name 'jenkins-coreci'
