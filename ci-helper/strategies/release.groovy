@@ -105,7 +105,6 @@ def call(isMerge, prNumber, workDir='') {
        println("Something went wrong on $stage stage")
        throw e
     } 
-
 }
 
 return this
