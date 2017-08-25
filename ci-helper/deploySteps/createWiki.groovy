@@ -1,9 +1,6 @@
 import groovy.json.JsonBuilder;
 
-def call(id, repo, tag, app, image) {
-    withCredentials([
-        string(credentialsId: id, variable: 'token')
-    ]) {
+def call(tag, app, image) {
 
     // Define variables
     def build_user = wrap([$class: 'BuildUser']) { env.BUILD_USER }
@@ -135,7 +132,7 @@ Page contains information about all the deployments
         echo "${sidebar}" > _Sidebar.md
         git add ${page} ${file} Home.md _Sidebar.md
         git commit -m 'Update due to deployment to ${env.ENV_STACK}'
-        git push
+        git push git@github.com:${repo}.wiki.git
         cd -
         rm -rf wiki
     """   

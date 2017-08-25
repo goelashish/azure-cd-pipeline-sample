@@ -78,7 +78,7 @@ def call(isMerge, prNumber, workDir='') {
                             },
                             "Creating wiki": {
                                 stage="Creating wiki"
-                                load("ci-helper/deploySteps/createWiki.groovy")(githubTokenId, repo, tag, p.applicationName, fullAppTag)
+                                load("ci-helper/deploySteps/createWiki.groovy")(tag, p.applicationName, fullAppTag)
                                 // shreben
                             }
                         )
