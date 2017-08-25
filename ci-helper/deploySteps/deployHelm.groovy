@@ -7,11 +7,8 @@ def call(image, workDir='') {
     withEnv(["KUBECONFIG=${KUBECONFIG}", "HELM_HOME=${WORKSPACE}"]) {    
         docker.withRegistry(p.dockerRegistryUrl, p.dockerRegistryCredentialsId) {
              docker.image("helm-kubectl").inside() {
-
              sh("cd ci-helper/infra/${workDir}/helm-${p.applicationName}/; helm lint; cd -")
-
              installed = sh (script: "helm ls --tiller-namespace=${p.tillerNamespace}", returnStdout: true).find(/${p.applicationName}-${env.ENV_STACK}/)
-
              if (!installed){ 
                 sh(returnStdout: true, script: """
                    helm init --client-only; 
