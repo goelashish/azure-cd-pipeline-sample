@@ -44,7 +44,6 @@ node {
             }
 
         }
-
         def prNumber = getPrFromCommitID(repo, getLastCommit(-1)) ?: getPrFromCommitID(repo, getLastCommitIdInPR())
 
         debug(prNumber)
