@@ -1,6 +1,6 @@
 [
   applicationName: 'demo-app',
-  applicationUrl: "https://demo-app.${env.ENV_STACK}.platform.mnscorp.net",
+  applicationUrl: "http://demo-app.${env.ENV_STACK}.platform.mnscorp.net",
   tillerNamespace: 'demo',
   k8sConfigName: "demo-config-${env.ENV_STACK}",
   k8sConfig: "${getVaultSecret(githubTokenId, vaultUrl, "${vaultk8sSecretDataPath}/${env.ENV_STACK}")['kubconfig']}",
