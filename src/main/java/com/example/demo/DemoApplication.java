@@ -14,7 +14,7 @@ public class DemoApplication {
 	static Logger log = Logger.getLogger(DemoApplication.class);
 	public static void main(String[] args) {
 //        if (true) {}
-//	  while (true) {}
+// 	    while (true) {}	
 		BasicConfigurator.configure();
 		SpringApplication.run(DemoApplication.class, args);
 		log.info("Application Is Ready");
