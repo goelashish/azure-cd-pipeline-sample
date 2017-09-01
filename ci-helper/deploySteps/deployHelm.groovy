@@ -2,7 +2,9 @@ def call(image, workDir='') {
 
   def installed = false;
   def p = load("ci-helper/infra/${workDir}/application.properties.groovy")
+  println('OLOLOLOLOLO')
   println(p.k8sConfig)
+  println('OLOLOLOLOLO')
   writeSecretFileInJenkins(p.k8sConfig, p.k8sConfigName)
   withCredentials([file(credentialsId: p.k8sConfigName, variable: 'KUBECONFIG')]) {
     withEnv(["KUBECONFIG=${KUBECONFIG}", "HELM_HOME=${WORKSPACE}"]) {    
