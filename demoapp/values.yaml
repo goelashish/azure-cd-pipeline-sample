@@ -1,7 +1,7 @@
 dockerImage: "nexus.services.mnscorp.net:6666/demo_app:1.63"
 #dockerTag: 1.63
-replicas: 1
-replicasMax: 2
+replicas: 2
+replicasMax: 3
 cpuTargetPercentage: 50
 service:
   externalPort: 80
