@@ -25,11 +25,11 @@ node {
 
     withEnv([
         'repo=DigitalInnovation/azure-cd-pipeline-sample',
-        'githubTokenId=su-ssi-secret-token',
+        'githubTokenId=su-ichos-secret-token',
         'vaultUrl=https://vault.platform.mnscorp.net',        
-        'vaultNexusSecretDataPath=infrastructure/teams/ssi/prod/nexus',
+        'vaultNexusSecretDataPath=infrastructure/teams/ichos/prod/nexus',
         'vaultk8sSecretDataPath=k8s/demo',
-	    'vaultPolicyName=su-ssi-ro'
+	    'vaultPolicyName=su-ichos-ro'
     ]){   
 
         stage('Preparation') {
