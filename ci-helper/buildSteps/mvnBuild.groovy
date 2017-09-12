@@ -1,6 +1,5 @@
 def call(workDir='') {	
 	def p = load("ci-helper/infra/${workDir}/application.properties.groovy")
-	println "Content Maven = "+p.mavenSettingsXml
 	writeSecretFileInJenkins(p.mavenSettingsXml, "mavenSettingsXml")
     withCredentials([file(credentialsId: 'mavenSettingsXml', variable: 'mavenSettingsXmlPath')]) { 
     	withMaven(maven: 'Maven') { 
