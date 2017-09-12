@@ -33,7 +33,7 @@ node {
     ]){   
 
         stage('Preparation') {
-            //deleteDir() 
+            deleteDir() 
             checkout scm 
             if (env.TAG_TO_DEPLOY) {
                 checkout([$class: 'GitSCM', branches: [[name: env.TAG_TO_DEPLOY ]], 
