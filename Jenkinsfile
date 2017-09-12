@@ -27,7 +27,7 @@ node {
         'repo=DigitalInnovation/azure-cd-pipeline-sample',
         'githubTokenId=su-ichos-secret-token',
         'vaultUrl=https://vault.platform.mnscorp.net',        
-        'vaultNexusSecretDataPath=infrastructure/teams/ssi/prod/nexus',
+        'vaultNexusSecretDataPath=infrastructure/teams/ichos/prod/nexus',
         'vaultk8sSecretDataPath=k8s/demo',
 	    'vaultPolicyName=su-ichos-ro'
     ]){   
