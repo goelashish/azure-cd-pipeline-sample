@@ -1,0 +1,22 @@
+---
+# resource_types:
+#   - name: container
+#     type: docker-image
+#     source:
+#       repository: centos
+#       tag: latest
+
+resources:
+  - name: azure-cd-pipeline-repo
+    type: git
+    source:
+      uri: https://github.com/DigitalInnovation/azure-cd-pipeline-sample.git
+      branch: develop
+
+jobs:
+  - name: build
+    plan:
+      - get: azure-cd-pipeline-repo
+        trigger: true
+      - task: perform the build
+        file: azure-cd-pipeline-sample/ci/tasks/build.yml
